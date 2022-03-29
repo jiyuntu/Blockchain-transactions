@@ -1,0 +1,21 @@
+<html>
+<head>
+  <!-- Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script type="text/javascript" src="ethereum.json"></script>
+  <script type="text/javascript" src="bitcoin.json"></script>
+  <script type="text/javascript" src="polygon.json"></script>
+  <script type="text/javascript" src="tezos.json"></script>
+</head>
+<body>
+<!-- Plotly chart will be drawn inside this DIV -->
+<div id="graphDiv"></div>
+<div class="buttons">
+    <button onclick="updateEth()" class="select-button">Eth</button>
+    <button onclick="updateBtc()" class="select-button">Btc</button>
+    <button onclick="updateTzs()" class="select-button">Tzs</button>
+    <button onclick="updatePol()" class="select-button">Pol</button>
+</div>
+<script type="text/javascript" src="plot.js"></script>
+</body>
+</html>
