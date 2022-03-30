@@ -49,10 +49,13 @@ def plot_tezos():
     # https://api.tzkt.io/#operation/Operations_GetTransactionsCount
     df = pd.read_csv('tezos.csv')
     if df.shape[0] == 0:
+        record = False
         start = datetime(2019, 2, 1)
         last = 0
     else:
+        record = True
         start = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%m/%d/%Y') + relativedelta.relativedelta(months=2)
+        last_date = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%m/%d/%Y') + relativedelta.relativedelta(months=1)
         last = int(df['Value'][df.shape[0]-1])
     
     now = datetime.now()
@@ -62,8 +65,12 @@ def plot_tezos():
         response = requests.get(api)
         print(response.status_code)
         cnt = int(response.text)
-        l.append([(dt - relativedelta.relativedelta(months=1)).strftime('%Y-%m-%d'), cnt - last])
+        if(record):
+            l.append([(dt - relativedelta.relativedelta(months=1)).strftime('%Y-%m-%d'), (cnt - last) / (dt - last_date).days])
+        else:
+            record = True
         last = cnt
+        last_date = dt
     df2 = pd.DataFrame(l, columns=['Date(UTC)', 'Value'])
     df = pd.concat([df, df2], ignore_index=True)
     df.to_csv('tezos.csv', index=False)
@@ -91,7 +98,7 @@ def plot_polygon():
 def main():
     plot_ethereum()
     plot_bitcoin()
-    # plot_tezos()
+    plot_tezos()
     plot_polygon()
 
 
