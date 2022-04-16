@@ -54,10 +54,14 @@ def plot_tezos():
         last = 0
     else:
         record = True
-        start = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%m/%d/%Y') + relativedelta.relativedelta(months=2)
-        last_date = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%m/%d/%Y') + relativedelta.relativedelta(months=1)
-        last = int(df['Value'][df.shape[0]-1])
-    
+        start = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%Y-%m-%d') + relativedelta.relativedelta(months=2)
+        last_date = datetime.strptime(df['Date(UTC)'][df.shape[0]-1], '%Y-%m-%d') + relativedelta.relativedelta(months=1)
+        print(last_date)
+        api = f'https://api.tzkt.io/v1/operations/transactions/count?timestamp.lt={last_date.strftime("%Y-%m-%d")}T00:00:00Z'
+        response = requests.get(api)
+        print(response.status_code)
+        last = int(response.text)
+
     now = datetime.now()
     l = []
     for dt in rrule.rrule(rrule.MONTHLY, dtstart=start, until=now):
